@@ -39,7 +39,7 @@ Route::get('posts/byUser/{user_id}', function ($user_id) {
     return response()->json($posts);
 });
 
-Route::post('posts/{id}/delete', function ($id) {
+Route::delete('posts/{id}', function ($id) {
     $post = Post::find($id);
     $post->delete();
 
@@ -48,4 +48,16 @@ Route::post('posts/{id}/delete', function ($id) {
     // Post::destroy($id);
 
     return response()->json(['status'=>'Deleted']);
+});
+
+Route::post('posts', function (Request $request) {
+    // $post = new Post;
+    // $post->title = $request->title;
+    // $post->content = $request->content;
+    // $post->user_id = $request->user_id;
+    // $post->save();
+
+    $post = Post::create($request->all());
+
+    return response()->json($post);
 });
