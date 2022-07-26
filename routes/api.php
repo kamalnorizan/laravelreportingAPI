@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Post;
+use App\User;
 use Illuminate\Support\Facades\Validator;
 /*
 |--------------------------------------------------------------------------
@@ -61,12 +62,18 @@ Route::post('posts', function (Request $request) {
     // $post->user_id = $request->user_id;
     // $post->save();
 
+    $user=User::find($request->user_id);
+    if($user->posts->count()>=5){
+        return response()->json(["postlimit"=>"Telah lebih 5"]);
+    }
+
     $validator = Validator::make($request->all(),[
         'title'=>'required',
-        'user_id'=>'unique:posts,user_id',
+        'content'=>'required'
+        // 'user_id'=>'unique:posts,user_id',
     ],[
         'title.required'=>'Sila hantar field title',
-        'user_id.unique'=>'Id pengguna telah wujud'
+        // 'user_id.unique'=>'Id pengguna telah wujud'
     ]);
 
     if($validator->fails()){
@@ -74,6 +81,18 @@ Route::post('posts', function (Request $request) {
     }
 
     $post = Post::create($request->all());
+
+    return response()->json($post);
+});
+
+Route::post('posts/{post}/update', function (Request $request, Post $post) {
+    // dd($post);
+    // $post->title = $request->title;
+    // $post->content = $request->content;
+    // $post->user_id = $request->user_id;
+    // $post->save();
+
+    $post->update($request->all());
 
     return response()->json($post);
 });
