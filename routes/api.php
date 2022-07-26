@@ -28,6 +28,7 @@ Route::get('/posts', function(){
 Route::get('posts/{id}', function ($id) {
     $post = Post::find($id);
     //select * from posts where id=?
+    //Untuk select 1 post
 
     return response()->json($post);
 });
