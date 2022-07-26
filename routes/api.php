@@ -85,7 +85,7 @@ Route::post('posts', function (Request $request) {
     return response()->json($post);
 });
 
-Route::post('posts/{post}/update', function (Request $request, Post $post) {
+Route::post('posts/{post}', function (Request $request, Post $post) {
     // dd($post);
     // $post->title = $request->title;
     // $post->content = $request->content;
