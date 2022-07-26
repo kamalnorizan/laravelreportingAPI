@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Post;
 use App\User;
+use App\Comment;
 use Illuminate\Support\Facades\Validator;
 /*
 |--------------------------------------------------------------------------
@@ -96,3 +97,16 @@ Route::post('posts/{post}', function (Request $request, Post $post) {
 
     return response()->json($post);
 });
+
+
+Route::get('/comments', function(){
+    $comments=Comment::latest()->get(); //Eloquent
+    if(isset($request->id)){
+        $comments=$comments->where('id',$request->id);
+    }
+    //select * from comments order by created_at
+    $data['total']=$comments->count();
+    $data['comments']=$comments;
+    return response()->json($data);
+});
+
