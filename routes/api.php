@@ -28,7 +28,13 @@ Route::get('/posts', function(){
 Route::get('posts/{id}', function ($id) {
     $post = Post::find($id);
     //select * from posts where id=?
-    //Untuk select 1 post
 
     return response()->json($post);
+});
+
+Route::get('posts/byUser/{user_id}', function ($user_id) {
+    $posts = Post::where('user_id',$user_id)->get();
+    //select * from posts where user_id = ?
+
+    return response()->json($posts);
 });
