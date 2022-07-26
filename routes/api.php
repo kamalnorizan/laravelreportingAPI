@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Post;
+use Illuminate\Support\Facades\Validator;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -20,6 +21,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('/posts', function(){
     $posts=Post::latest()->get(); //Eloquent
+    if(isset($request->id)){
+        $posts=$posts->where('id',$request->id);
+    }
     //select * from posts order by created_at
 
     return response()->json($posts);
@@ -56,6 +60,18 @@ Route::post('posts', function (Request $request) {
     // $post->content = $request->content;
     // $post->user_id = $request->user_id;
     // $post->save();
+
+    $validator = Validator::make($request->all(),[
+        'title'=>'required',
+        'user_id'=>'unique:posts,user_id',
+    ],[
+        'title.required'=>'Sila hantar field title',
+        'user_id.unique'=>'Id pengguna telah wujud'
+    ]);
+
+    if($validator->fails()){
+        return response()->json($validator->messages());
+    }
 
     $post = Post::create($request->all());
 
