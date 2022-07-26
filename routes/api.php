@@ -38,3 +38,14 @@ Route::get('posts/byUser/{user_id}', function ($user_id) {
 
     return response()->json($posts);
 });
+
+Route::post('posts/{id}/delete', function ($id) {
+    $post = Post::find($id);
+    $post->delete();
+
+    // Post::where('id',$id)->first()->delete();
+    // Post::find($id)->delete();
+    // Post::destroy($id);
+
+    return response()->json(['status'=>'Deleted']);
+});
