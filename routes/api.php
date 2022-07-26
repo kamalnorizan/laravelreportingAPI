@@ -100,7 +100,7 @@ Route::post('posts/{post}', function (Request $request, Post $post) {
 
 
 Route::get('/comments', function(){
-    $comments=Comment::latest()->get(); //Eloquent
+    $comments=Comment::with('user','post.user')->orderBy('id')->get(); //Eloquent
     if(isset($request->id)){
         $comments=$comments->where('id',$request->id);
     }
@@ -109,4 +109,5 @@ Route::get('/comments', function(){
     $data['comments']=$comments;
     return response()->json($data);
 });
+
 
