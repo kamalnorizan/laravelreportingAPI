@@ -22,6 +22,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post('login', 'ApiAuthController@login');
+Route::get('logout', 'ApiAuthController@logout')->middleware('auth:api');
 
 Route::prefix('v1')->middleware('auth:api')->group(__DIR__.'/apiV1.php');
 Route::prefix('v2')->middleware('auth:api')->group(__DIR__.'/apiV2.php');

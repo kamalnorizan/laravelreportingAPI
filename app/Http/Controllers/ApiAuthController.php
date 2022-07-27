@@ -23,4 +23,12 @@ class ApiAuthController extends Controller
             return response()->json(['fail'=>'Wrong username / password'], 302);
         }
     }
+
+    public function logout()
+    {
+        $user = Auth::user()->token();
+        $user->revoke();
+
+        return response()->json(['status'=>'success'], 200);
+    }
 }

@@ -67,7 +67,13 @@ class PostController extends Controller
             return response()->json($validator->messages());
         }
 
-        $post = Post::create($request->all());
+        $post = new Post;
+        $post->title = $request->title;
+        $post->content = $request->content;
+        $post->user_id = Auth::user()->id;
+        $post->save();
+
+        // $post = Post::create($request->all());
 
         return response()->json($post);
     }
