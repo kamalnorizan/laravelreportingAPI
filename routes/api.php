@@ -21,22 +21,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/posts', function(){
-    $posts=Post::latest()->get(); //Eloquent
-    if(isset($request->id)){
-        $posts=$posts->where('id',$request->id);
-    }
-    //select * from posts order by created_at
+Route::get('/posts', 'PostController@index');
 
-    return response()->json($posts);
-});
-
-Route::get('posts/{id}', function ($id) {
-    $post = Post::find($id);
-    //select * from posts where id=?
-
-    return response()->json($post);
-});
+Route::get('posts/{post}', 'PostController@show');
 
 Route::get('posts/byUser/{user_id}', function ($user_id) {
     $posts = Post::where('user_id',$user_id)->get();

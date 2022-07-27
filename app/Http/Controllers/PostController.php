@@ -14,8 +14,13 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
-        return view('posts.index',compact('posts'));
+        $posts=Post::latest()->get(); //Eloquent
+        if(isset($request->id)){
+            $posts=$posts->where('id',$request->id);
+        }
+        //select * from posts order by created_at
+
+        return response()->json($posts);
     }
 
     /**
@@ -39,15 +44,20 @@ class PostController extends Controller
         //
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Post  $post
-     * @return \Illuminate\Http\Response
-     */
+    // /**
+    //  * Display the specified resource.
+    //  *
+    //  * @param  \App\Post  $post
+    //  * @return \Illuminate\Http\Response
+    //  */
     public function show(Post $post)
     {
-        //
+        return response()->json($post);
+    }
+
+    public function postsByUser($user_id)
+    {
+        $user = User::find($user_id);
     }
 
     /**
