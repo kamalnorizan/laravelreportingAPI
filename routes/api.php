@@ -21,15 +21,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-//posts
-Route::get('/posts', 'PostController@index');
-Route::get('posts/{post}', 'PostController@show');
-Route::post('posts', 'PostController@store');
-Route::post('posts/{post}', 'PostController@update');
-Route::delete('posts/{post}', 'PostController@destroy');
-Route::get('posts/byUser/{user_id}', 'PostController@postsByUser');
-
-//comments
-Route::get('/comments', 'CommentController@index');
-
+Route::prefix('v1')->group(__DIR__.'/apiV1.php');
+Route::prefix('v2')->group(__DIR__.'/apiV2.php');
 

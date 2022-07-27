@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Comment;
+use App\User;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -14,10 +15,22 @@ class CommentController extends Controller
      */
     public function index()
     {
-        $comments=Comment::with('user','post.user')->orderBy('id')->get(); //Eloquent
-        if(isset($request->id)){
-            $comments=$comments->where('id',$request->id);
-        }
+        $comments=Comment::with('user')->orderBy('id')->get(); //Eloquent
+        // if(isset($request->id)){
+        //     $comments=$comments->where('id',$request->id);
+        // }
+        //select * from comments order by created_at
+        // $data['total']=$comments->count();
+        // $data['comments']=$comments;
+        return response()->json($comments);
+    }
+
+    public function indexV2()
+    {
+        $comments=Comment::with('user')->orderBy('id')->get(); //Eloquent
+        // if(isset($request->id)){
+        //     $comments=$comments->where('id',$request->id);
+        // }
         //select * from comments order by created_at
         $data['total']=$comments->count();
         $data['comments']=$comments;
