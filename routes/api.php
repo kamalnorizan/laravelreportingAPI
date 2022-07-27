@@ -24,5 +24,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('login', 'ApiAuthController@login');
 
 Route::prefix('v1')->middleware('auth:api')->group(__DIR__.'/apiV1.php');
-Route::prefix('v2')->group(__DIR__.'/apiV2.php');
+Route::prefix('v2')->middleware('auth:api')->group(__DIR__.'/apiV2.php');
 

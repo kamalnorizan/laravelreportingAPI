@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Post;
 use App\User;
+use Auth;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -15,7 +16,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts=Post::latest()->get(); //Eloquent
+        $posts=Post::where('user_id',Auth::user()->id)->latest()->get();
         if(isset($request->id)){
             $posts=$posts->where('id',$request->id);
         }

@@ -19,6 +19,8 @@ class ApiAuthController extends Controller
             $success['user']=$user;
 
             return response()->json(['success'=>$success], 200);
+        }else{
+            return response()->json(['fail'=>'Wrong username / password'], 302);
         }
     }
 }
