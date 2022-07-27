@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Post;
+use App\User;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -41,7 +42,33 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // $post = new Post;
+        // $post->title = $request->title;
+        // $post->content = $request->content;
+        // $post->user_id = $request->user_id;
+        // $post->save();
+
+        $user=User::find($request->user_id);
+        if($user->posts->count()>=5){
+            return response()->json(["postlimit"=>"Telah lebih 5"]);
+        }
+
+        $validator = Validator::make($request->all(),[
+            'title'=>'required',
+            'content'=>'required'
+            // 'user_id'=>'unique:posts,user_id',
+        ],[
+            'title.required'=>'Sila hantar field title',
+            // 'user_id.unique'=>'Id pengguna telah wujud'
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->messages());
+        }
+
+        $post = Post::create($request->all());
+
+        return response()->json($post);
     }
 
     // /**
@@ -58,6 +85,7 @@ class PostController extends Controller
     public function postsByUser($user_id)
     {
         $user = User::find($user_id);
+        return response()->json($user->posts);
     }
 
     /**
@@ -80,7 +108,15 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        // dd($post);
+        // $post->title = $request->title;
+        // $post->content = $request->content;
+        // $post->user_id = $request->user_id;
+        // $post->save();
+
+        $post->update($request->all());
+
+        return response()->json($post);
     }
 
     /**
@@ -91,6 +127,12 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $post->delete();
+
+        // Post::where('id',$id)->first()->delete();
+        // Post::find($id)->delete();
+        // Post::destroy($id);
+
+        return response()->json(['status'=>'Deleted']);
     }
 }

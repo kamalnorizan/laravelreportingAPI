@@ -37,11 +37,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    /**
-     * Get all of the posts for the User
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
+
     public function posts()
     {
         return $this->hasMany(Post::class, 'user_id', 'id');

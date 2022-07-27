@@ -14,7 +14,14 @@ class CommentController extends Controller
      */
     public function index()
     {
-        //
+        $comments=Comment::with('user','post.user')->orderBy('id')->get(); //Eloquent
+        if(isset($request->id)){
+            $comments=$comments->where('id',$request->id);
+        }
+        //select * from comments order by created_at
+        $data['total']=$comments->count();
+        $data['comments']=$comments;
+        return response()->json($data);
     }
 
     /**
