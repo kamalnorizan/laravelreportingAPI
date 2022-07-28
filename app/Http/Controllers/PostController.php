@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Post;
 use App\User;
 use Auth;
+
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -53,34 +55,38 @@ class PostController extends Controller
         // $post->content = $request->content;
         // $post->user_id = $request->user_id;
         // $post->save();
+        if(Auth::user()->tokenCan('create-post')){
 
-        $user=User::find($request->user_id);
-        if($user->posts->count()>=5){
-            return response()->json(["postlimit"=>"Telah lebih 5"]);
+            // $user=User::find($request->user_id);
+            // if($user->posts->count()>=5){
+            //     return response()->json(["postlimit"=>"Telah lebih 5"]);
+            // }
+
+            $validator = Validator::make($request->all(),[
+                'title'=>'required',
+                'content'=>'required'
+                // 'user_id'=>'unique:posts,user_id',
+            ],[
+                'title.required'=>'Sila hantar field title',
+                // 'user_id.unique'=>'Id pengguna telah wujud'
+            ]);
+
+            if($validator->fails()){
+                return response()->json($validator->messages());
+            }
+
+            $post = new Post;
+            $post->title = $request->title;
+            $post->content = $request->content;
+            $post->user_id = Auth::user()->id;
+            $post->save();
+
+            // $post = Post::create($request->all());
+
+            return response()->json($post);
+        }else{
+            return response()->json(['error'=>'unauthorized']);
         }
-
-        $validator = Validator::make($request->all(),[
-            'title'=>'required',
-            'content'=>'required'
-            // 'user_id'=>'unique:posts,user_id',
-        ],[
-            'title.required'=>'Sila hantar field title',
-            // 'user_id.unique'=>'Id pengguna telah wujud'
-        ]);
-
-        if($validator->fails()){
-            return response()->json($validator->messages());
-        }
-
-        $post = new Post;
-        $post->title = $request->title;
-        $post->content = $request->content;
-        $post->user_id = Auth::user()->id;
-        $post->save();
-
-        // $post = Post::create($request->all());
-
-        return response()->json($post);
     }
 
     // /**
