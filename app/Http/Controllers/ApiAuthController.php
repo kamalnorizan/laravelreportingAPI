@@ -15,7 +15,7 @@ class ApiAuthController extends Controller
 
         if(Auth::attempt($credential)){
             $user = Auth::user();
-            $success['token'] = $user->createToken('Aplikasi Mobil')->accessToken;
+            $success['token'] = $user->createToken('Aplikasi Mobil',['show-posts'])->accessToken;
             $success['user']=$user;
 
             return response()->json(['success'=>$success], 200);

@@ -16,13 +16,18 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts=Post::where('user_id',Auth::user()->id)->latest()->get();
-        if(isset($request->id)){
-            $posts=$posts->where('id',$request->id);
-        }
-        //select * from posts order by created_at
+        if(Auth::user()->tokenCan('show-posts')){
 
-        return response()->json($posts);
+            $posts=Post::where('user_id',Auth::user()->id)->latest()->get();
+            if(isset($request->id)){
+                $posts=$posts->where('id',$request->id);
+            }
+            //select * from posts order by created_at
+
+            return response()->json($posts);
+        }else{
+            return response()->json(['error'=>'unauthorized']);
+        }
     }
 
     /**
