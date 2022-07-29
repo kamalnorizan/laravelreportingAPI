@@ -97,13 +97,19 @@ class PostController extends Controller
     //  */
     public function show(Post $post)
     {
-        return response()->json($post);
+        if(Auth::user()->tokenCan('edit-post')){
+
+            return response()->json($post);
+        }else{
+            return response()->json(['error'=>'unauthorized']);
+        }
     }
 
-    public function postsByUser($user_id)
+    public function postsByUser()
     {
-        $user = User::find($user_id);
-        return response()->json($user->posts);
+        // $user = User::find($user_id);
+        // return response()->json($user->posts);
+        return response()->json(Auth::user()->posts);
     }
 
     /**

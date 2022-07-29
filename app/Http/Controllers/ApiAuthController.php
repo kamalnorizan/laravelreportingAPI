@@ -4,24 +4,23 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Auth;
+use DB;
+use App\User;
 class ApiAuthController extends Controller
 {
     public function login(Request $request)
     {
-        $credential = [
-            'email'=>$request->email,
-            'password'=>$request->password
-        ];
+        $userCheck = User::where('email',$request->email)->first();
 
-        if(Auth::attempt($credential)){
-            $user = Auth::user();
-            if($user->role=='admin'){
+        if($userCheck){
+
+            if($userCheck->role=='admin'){
                 $scope = ['show-posts','edit-post','create-post'];
             }else{
                 $scope = ['show-posts'];
             }
-            $success['token'] = $user->createToken('Aplikasi Mobil',$scope)->accessToken;
-            $success['user']=$user;
+            $success['token'] = $userCheck->createToken('Aplikasi Mobil',['show-posts','edit-post','create-post'])->accessToken;
+            $success['user']=$userCheck;
 
             return response()->json(['success'=>$success], 200);
         }else{
