@@ -31,8 +31,9 @@ class AuthServiceProvider extends ServiceProvider
 
         Passport::tokensCan([
             'show-posts'=>'Can show posts',
+            'delete-post'=>'Can delete posts',
             'edit-post'=>'Can update posts',
-            'create-post'=>'Can create posts',
+            'create-post'=>'Can create posts'
         ]);
     }
 }

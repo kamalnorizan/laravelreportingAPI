@@ -15,12 +15,13 @@ class ApiAuthController extends Controller
         if($userCheck){
 
             if($userCheck->role=='admin'){
-                $scope = ['show-posts','edit-post','create-post'];
+                $scope = ['show-posts','edit-post','create-post','delete-post'];
             }else{
                 $scope = ['show-posts'];
             }
             $success['token'] = $userCheck->createToken('Aplikasi Mobil',['show-posts','edit-post','create-post'])->accessToken;
             $success['user']=$userCheck;
+            $success['scope']=$scope;
 
             return response()->json(['success'=>$success], 200);
         }else{

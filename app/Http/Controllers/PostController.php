@@ -151,12 +151,16 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        $post->delete();
+        if(Auth::user()->tokenCan('edit-post')){
+            $post->delete();
+            return response()->json(['status'=>'Deleted']);
+        }else{
+            return response()->json(['error'=>'unauthorized'],403);
+        }
 
         // Post::where('id',$id)->first()->delete();
         // Post::find($id)->delete();
         // Post::destroy($id);
 
-        return response()->json(['status'=>'Deleted']);
     }
 }
